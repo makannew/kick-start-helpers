@@ -252,3 +252,5 @@ function testFunc() {
 }
 
 module.exports = testFunc;
+
+console.log("index.js called");
