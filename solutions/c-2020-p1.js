@@ -1,18 +1,19 @@
-// Input reader
-const readline = require("readline");
-
-const readInputLine = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-const inputBuffer = [];
+let inputBuffer = [];
 let readIndex = 0;
 let checkAvailableInput = () => null;
-readInputLine.on("line", (input) => {
-  inputBuffer.push(input);
-  checkAvailableInput();
-});
+const readline = require("readline");
+syncWithConsole(readline);
+
+function syncWithConsole(readline) {
+  const readInputLine = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  readInputLine.on("line", (input) => {
+    inputBuffer.push(input);
+    checkAvailableInput();
+  });
+}
 
 async function rl() {
   ++readIndex;
@@ -32,23 +33,7 @@ async function ra() {
   return inputArray;
 }
 
-// Helpers
-function combinations(data) {
-  if (data.length === 1) {
-    return [data[0]];
-  }
-  let result = [];
-  for (let i = 0, lenI = data.length; i < lenI; ++i) {
-    let otherItems = [...data];
-    otherItems.splice(i, 1);
-    const otherLen = otherItems.length;
-    const otherComb = combinations(otherItems);
-    for (let j = 0, lenJ = otherComb.length; j < lenJ; j += otherLen) {
-      result = [...result, data[i], ...otherComb.slice(j, j + otherLen)];
-    }
-  }
-  return result;
-}
+// helpers
 
 function buildData(len, fill) {
   const result = [];
@@ -304,6 +289,23 @@ function parseAll(data) {
 // Result printer
 function printResult(testN, result) {
   console.log(`Case #${testN}: ${result}`);
+}
+
+function combinations(data) {
+  if (data.length === 1) {
+    return [data[0]];
+  }
+  let result = [];
+  for (let i = 0, lenI = data.length; i < lenI; ++i) {
+    let otherItems = [...data];
+    otherItems.splice(i, 1);
+    const otherLen = otherItems.length;
+    const otherComb = combinations(otherItems);
+    for (let j = 0, lenJ = otherComb.length; j < lenJ; j += otherLen) {
+      result = [...result, data[i], ...otherComb.slice(j, j + otherLen)];
+    }
+  }
+  return result;
 }
 
 // Start

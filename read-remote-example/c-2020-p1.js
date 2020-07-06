@@ -33,7 +33,7 @@ function runModules(urls) {
   return loadingPromise;
 }
 
-async function main() {
+(async function main() {
   const readline = require("readline");
 
   await runModules([
@@ -61,6 +61,4 @@ async function main() {
     printResult(testN, totalMatch);
   }
   process.exit();
-}
-
-main();
+})();
