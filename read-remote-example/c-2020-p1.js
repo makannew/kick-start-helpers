@@ -1,7 +1,7 @@
 const http = require("https");
 const vm = require("vm");
 
-async function runModules(urls) {
+function runModules(urls) {
   let loadedModules = 0;
   let resolveThePromise;
   const loadingPromise = new Promise((resolve, reject) => {
@@ -33,13 +33,34 @@ async function runModules(urls) {
   return loadingPromise;
 }
 
-(async function main() {
+async function main() {
   const readline = require("readline");
 
   await runModules([
-    "https://makannew.github.io/kick-start-helpers/index.js",
+    "https://makannew.github.io/kick-start-helpers/src/index.js",
     "https://makannew.github.io/kick-start-boilerplate/src/index.js",
   ]);
-  const { inputBuffer, readIndex } = syncWithConsole(readline);
-  console.log(testFunc());
-})().catch((err) => console.log(err));
+  syncWithConsole(readline);
+  //
+  const [T] = await ra();
+  for (let testN = 1; testN <= T; ++testN) {
+    const [N, K] = await ra();
+    const data = await ra();
+    parseAll(data);
+    let matchData = [];
+    for (let j = K; j > 0; --j) {
+      matchData.push(j);
+    }
+    parseAll(matchData);
+    const { totalMatch } = findData(
+      matchData,
+      buildShape(K),
+      data,
+      buildShape(data.length)
+    );
+    printResult(testN, totalMatch);
+  }
+  process.exit();
+}
+
+main();
