@@ -246,11 +246,3 @@ function parseAll(data) {
     data[i] = parseInt(data[i], 10);
   }
 }
-
-function testFunc() {
-  return "hello from module";
-}
-
-// module.exports = testFunc;
-
-console.log("index.js called");
