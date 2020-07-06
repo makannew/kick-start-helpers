@@ -251,6 +251,6 @@ function testFunc() {
   return "hello from module";
 }
 
-module.exports = testFunc;
+// module.exports = testFunc;
 
 console.log("index.js called");
