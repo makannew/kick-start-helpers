@@ -61,7 +61,7 @@ function buildData(len, fill) {
   return result;
 }
 
-function buildShape(x, y = 0, z = 0) {
+function buildShape(x = 1, y = 1, z = 1) {
   return { x, y, z };
 }
 
@@ -225,7 +225,8 @@ function crossNeighborsArrays({
   ].filter((item) => item != undefined);
 }
 
-function depict(i, { x, y, z }) {
+function depict(i, dataShape) {
+  const { x, y, z } = dataShape;
   let border, closeNeighbors, crossNeighbors, namedNeighbors, xPos, yPos, zPos;
 
   zPos = y != 0 ? Math.floor(i / (x * y)) : 0;
@@ -288,11 +289,6 @@ function findData(matchData, matchShape, data, dataShape) {
   return { result, totalMatch };
 }
 
-// Result printer
-function printResult(testN, result) {
-  console.log(`Case #${testN}: ${result}`);
-}
-
 function combinations(data) {
   if (data.length === 1) {
     return [data[0]];
@@ -310,6 +306,38 @@ function combinations(data) {
   return result;
 }
 
+function iterate(data, chunkShape, dataShape, func) {
+  const { x: xc, y: yc, z: zc } = chunkShape;
+  const { x: xd, y: yd, z: zd } = dataShape;
+  for (let z = 0; z <= zd - zc; ++z) {
+    for (let y = 0; y <= yd - yc; ++y) {
+      for (let x = 0; x <= xd - xc; ++x) {
+        let pos = x + y * xd + z * xd * yd;
+        let thisChunk = [];
+        let thisMask = [];
+        for (let k = 0; k < zc; ++k) {
+          for (let j = 0; j < yc; ++j) {
+            for (let i = 0; i < xc; ++i) {
+              const index = i + j * xd + k * xd * yd;
+              thisChunk.push(data[pos + index]);
+              const maskLen = thisMask.length;
+              if (index > maskLen) {
+                thisMask = [...thisMask, ...buildData(index - maskLen, null)];
+              }
+              thisMask.push(data[pos + index]);
+            }
+          }
+        }
+        func(thisChunk, thisMask, pos);
+      }
+    }
+  }
+}
+// Result printer
+function printResult(testN, result) {
+  console.log(`Case #${testN}: ${result}`);
+}
+
 // export modules only for local usage
 module.exports = {
   readLine,
@@ -323,4 +351,5 @@ module.exports = {
   buildShape,
   analyze,
   combinations,
+  iterate,
 };
