@@ -1,11 +1,11 @@
 let inputBuffer = [];
 let readIndex = 0;
 let checkAvailableInput = () => null;
-const readline = require("readline");
-syncWithConsole(readline);
+const readlineModule = require("readline");
+syncWithConsole(readlineModule);
 
-function syncWithConsole(readline) {
-  const readInputLine = readline.createInterface({
+function syncWithConsole(readlineModule) {
+  const readInputLine = readlineModule.createInterface({
     input: process.stdin,
     output: process.stdout,
   });
@@ -15,7 +15,7 @@ function syncWithConsole(readline) {
   });
 }
 
-async function rl() {
+async function readLine() {
   ++readIndex;
   return new Promise((resolve, reject) => {
     checkAvailableInput = () => {
@@ -27,10 +27,18 @@ async function rl() {
   });
 }
 
-async function ra() {
-  const newLine = await rl();
+async function readArray() {
+  const newLine = await readLine();
   const inputArray = newLine.split(" ");
   return inputArray;
+}
+
+async function readIntArray() {
+  const data = await readArray();
+  for (let i in data) {
+    data[i] = parseInt(data[i], 10);
+  }
+  return data;
 }
 
 // helpers
@@ -280,12 +288,6 @@ function findData(matchData, matchShape, data, dataShape) {
   return { result, totalMatch };
 }
 
-function parseAll(data) {
-  for (let i in data) {
-    data[i] = parseInt(data[i], 10);
-  }
-}
-
 // Result printer
 function printResult(testN, result) {
   console.log(`Case #${testN}: ${result}`);
@@ -310,10 +312,9 @@ function combinations(data) {
 
 // export modules only for local usage
 module.exports = {
-  combinations,
-  parseAll,
-  ra,
-  rl,
+  readLine,
+  readArray,
+  readIntArray,
   printResult,
   findData,
   depict,
@@ -321,4 +322,5 @@ module.exports = {
   buildData,
   buildShape,
   analyze,
+  combinations,
 };

@@ -2,32 +2,30 @@
 // replace below code (const {...}="require("...")" )
 // with content of index.js
 const {
-  combinations,
-  parseAll,
-  ra,
-  rl,
+  readLine,
+  readArray,
+  readIntArray,
+  printResult,
   findData,
   depict,
   mergeData,
   buildData,
   buildShape,
   analyze,
-  printResult,
+  combinations,
 } = require("../src/index.js");
 
 // Start
 (async function main() {
-  const [T] = await ra();
+  const [T] = await readIntArray();
 
   for (let testN = 1; testN <= T; ++testN) {
-    const [N, K] = await ra();
-    const data = await ra();
-    parseAll(data);
+    const [N, K] = await readIntArray();
+    const data = await readIntArray();
     let matchData = [];
     for (let j = K; j > 0; --j) {
       matchData.push(j);
     }
-    parseAll(matchData);
     const { totalMatch } = findData(
       matchData,
       buildShape(K),

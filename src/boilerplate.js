@@ -1,5 +1,7 @@
+const { readArray } = require(".");
+
 (async function main() {
-  const [T] = await ra();
+  const [T] = await readIntArray();
 
   for (let testN = 1; testN <= T; ++testN) {
     // Here is solution for test
