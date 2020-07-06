@@ -6,7 +6,9 @@ It provides a way to solve google [kick-start competition](https://codingcompeti
 - Abstract interface to solve data-structure problems
 
 ## How use
-- Copy/pase content of [index.js](https://github.com/makannew/kick-start-helpers/blob/master/src/index.js) in competition code window
+* Copy/paste content of [index.js](https://github.com/makannew/kick-start-helpers/blob/master/src/index.js) in the code window
+* Copy/paste content of [boilerplate.js](https://github.com/makannew/kick-start-helpers/blob/master/src/boilerplate.js) in the code window
+* Write your code inside the provided `for` loop
 
 ## Goal
 My main goal is building few functions to solve data-structure problems in an abstract way close to human thinking pattern. Then If it is possible to solve all past competition problems through these functions I can conclude that they will useful for comming problems as well. These functions should have some features to be more effective:
