@@ -1,3 +1,40 @@
+let inputBuffer = [];
+let readIndex = 0;
+let checkAvailableInput = () => null;
+const readline = require("readline");
+syncWithConsole(readline);
+
+function syncWithConsole(readline) {
+  const readInputLine = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  readInputLine.on("line", (input) => {
+    inputBuffer.push(input);
+    checkAvailableInput();
+  });
+}
+
+async function rl() {
+  ++readIndex;
+  return new Promise((resolve, reject) => {
+    checkAvailableInput = () => {
+      if (readIndex <= inputBuffer.length) {
+        resolve(inputBuffer[readIndex - 1]);
+      }
+    };
+    checkAvailableInput();
+  });
+}
+
+async function ra() {
+  const newLine = await rl();
+  const inputArray = newLine.split(" ");
+  return inputArray;
+}
+
+// helpers
+
 function buildData(len, fill) {
   const result = [];
   result.length = len;
@@ -226,6 +263,8 @@ function findData(matchData, matchShape, data, dataShape) {
   for (let i = 0, len = data.length; i < len; ++i) {
     if (data[i] === matchArray[index] || matchArray[index] === null) {
       ++index;
+    } else if (data[i] === matchArray[0]) {
+      index = 1;
     } else {
       index = 0;
     }
@@ -247,6 +286,11 @@ function parseAll(data) {
   }
 }
 
+// Result printer
+function printResult(testN, result) {
+  console.log(`Case #${testN}: ${result}`);
+}
+
 function combinations(data) {
   if (data.length === 1) {
     return [data[0]];
@@ -263,3 +307,18 @@ function combinations(data) {
   }
   return result;
 }
+
+// export modules only for local usage
+module.exports = {
+  combinations,
+  parseAll,
+  ra,
+  rl,
+  printResult,
+  findData,
+  depict,
+  mergeData,
+  buildData,
+  buildShape,
+  analyze,
+};
