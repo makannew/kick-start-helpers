@@ -1,3 +1,5 @@
+// Unfortunately loading from github does not work
+// in online competition
 const http = require("https");
 const vm = require("vm");
 
@@ -38,7 +40,6 @@ function runModules(urls) {
 
   await runModules([
     "https://makannew.github.io/kick-start-helpers/src/index.js",
-    "https://makannew.github.io/kick-start-boilerplate/src/index.js",
   ]);
   syncWithConsole(readline);
   //
