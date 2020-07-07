@@ -1,6 +1,3 @@
-// To run code in online competition node.js just
-// replace below code (const {...}="require("...")" )
-// with content of index.js
 const {
   readLine,
   readArray,
@@ -8,11 +5,11 @@ const {
   printResult,
   findData,
   depict,
-  mergeData,
   buildData,
   buildShape,
   analyze,
   combinations,
+  iterate,
 } = require("../src/index.js");
 
 // Start

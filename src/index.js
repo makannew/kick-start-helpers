@@ -72,12 +72,6 @@ function analyze(data) {
   return { members, uniform };
 }
 
-function mergeData(model, data, func) {
-  for (let i = 0, len = model.length; i < len; ++i) {
-    model[i] = func(model[i], data[i], i);
-  }
-}
-
 function isInBorder(xPos, yPos, zPos, x, y, z) {
   if (y === 0 && z === 0) {
     if (xPos === 0 || xPos === x - 1) {
@@ -248,9 +242,17 @@ function depict(i, dataShape) {
   };
 }
 
+function isEqual(data1, data2) {
+  if (data1.length !== data2.length) return false;
+  for (let i = 0, len = data1.length; i < len; ++i) {
+    if (data1[i] !== data2[i]) return false;
+  }
+  return true;
+}
+
 function findData(matchData, matchShape, data, dataShape) {
-  const { x: xm, y: ym = 0, z: zm = 0 } = matchShape;
-  const { x: xd, y: yd = 0, z: zd = 0 } = dataShape;
+  const { x: xm, y: ym, z: zm } = matchShape;
+  const { x: xd, y: yd, z: zd } = dataShape;
   let matchArray = matchData.slice(0, xm);
   let zOffset = 0;
   for (let i = xm, len = matchData.length; i < len; i += xm) {
@@ -289,24 +291,31 @@ function findData(matchData, matchShape, data, dataShape) {
   return { result, totalMatch };
 }
 
-function combinations(data) {
-  if (data.length === 1) {
-    return [data[0]];
+function combine(data, validateFunc = (data, index) => true, index = 0) {
+  const len = data.length;
+  if (index >= len) {
+    if (validateFunc(data, index)) {
+      return [...data];
+    } else {
+      return [];
+    }
   }
   let result = [];
-  for (let i = 0, lenI = data.length; i < lenI; ++i) {
-    let otherItems = [...data];
-    otherItems.splice(i, 1);
-    const otherLen = otherItems.length;
-    const otherComb = combinations(otherItems);
-    for (let j = 0, lenJ = otherComb.length; j < lenJ; j += otherLen) {
-      result = [...result, data[i], ...otherComb.slice(j, j + otherLen)];
+  for (let i = index; i < len; ++i) {
+    const otherItems = data.slice(index);
+    otherItems.splice(i - index, 1);
+    const newData = [...data.slice(0, index), data[i], ...otherItems];
+    if (validateFunc(newData, index)) {
+      const newComb = combine(newData, validateFunc, index + 1);
+      if (newComb.length > 0) {
+        result = [...result, ...newComb];
+      }
     }
   }
   return result;
 }
 
-function iterate(data, chunkShape, dataShape, func) {
+function iterate(data, chunkShape, dataShape, chunkFunc) {
   const { x: xc, y: yc, z: zc } = chunkShape;
   const { x: xd, y: yd, z: zd } = dataShape;
   for (let z = 0; z <= zd - zc; ++z) {
@@ -319,16 +328,17 @@ function iterate(data, chunkShape, dataShape, func) {
           for (let j = 0; j < yc; ++j) {
             for (let i = 0; i < xc; ++i) {
               const index = i + j * xd + k * xd * yd;
-              thisChunk.push(data[pos + index]);
+              const thisData = data[pos + index];
+              thisChunk.push(thisData);
               const maskLen = thisMask.length;
               if (index > maskLen) {
                 thisMask = [...thisMask, ...buildData(index - maskLen, null)];
               }
-              thisMask.push(data[pos + index]);
+              thisMask.push(thisData);
             }
           }
         }
-        func(thisChunk, thisMask, pos);
+        chunkFunc(thisChunk, thisMask, pos);
       }
     }
   }
@@ -346,10 +356,10 @@ module.exports = {
   printResult,
   findData,
   depict,
-  mergeData,
   buildData,
   buildShape,
   analyze,
-  combinations,
   iterate,
+  combine,
+  isEqual,
 };
