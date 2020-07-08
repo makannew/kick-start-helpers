@@ -73,7 +73,7 @@ function analyze(data) {
 }
 
 function isInBorder(xPos, yPos, zPos, x, y, z) {
-  if (y === 0 && z === 0) {
+  if (y === 1 && z === 1) {
     if (xPos === 0 || xPos === x - 1) {
       return true;
     } else {
@@ -81,7 +81,7 @@ function isInBorder(xPos, yPos, zPos, x, y, z) {
     }
   }
 
-  if (z === 0) {
+  if (z === 1) {
     if (xPos === 0 || xPos === x - 1 || yPos === 0 || yPos === y - 1) {
       return true;
     } else {
@@ -223,7 +223,7 @@ function depict(i, dataShape) {
   const { x, y, z } = dataShape;
   let border, closeNeighbors, crossNeighbors, namedNeighbors, xPos, yPos, zPos;
 
-  zPos = y != 0 ? Math.floor(i / (x * y)) : 0;
+  zPos = Math.floor(i / (x * y));
   const planI = i - zPos * x * y;
   yPos = Math.floor(planI / x);
   xPos = planI - yPos * x;
@@ -291,9 +291,54 @@ function findData(matchData, matchShape, data, dataShape) {
   return { result, totalMatch };
 }
 
-function combine(data, validateFunc = (data, index) => true, index = 0) {
+function permute(data, validateFunc = (data, index) => true, index = 0) {
+  const len = 4,
+    p = Array.from(Array(len).keys()),
+    f = [...p];
+  let d = len - 2,
+    t;
+  let total = 0;
+  console.log("p", p, f, ++total);
+  while (d >= 0) {
+    //
+    if (f[d] === p[d + 1]) {
+      for (let i = d; i < len; ++i) {
+        f[i] = null;
+      }
+      --d;
+      if (f[d] === null) {
+        // t = p[d + 1];
+        // p[d + 1] = p[d];
+        // p[d] = t;
+        f[d] = p[d];
+        // d = len - 2;
+        console.log("heeeree!");
+        continue;
+      } else {
+        continue;
+      }
+    }
+    //
+    if (f[d] === null) {
+      console.log("d=", d);
+
+      f[d] = p[d];
+      d = len - 2;
+      f[d] = p[d];
+      continue;
+    }
+    //
+    t = p[d + 1];
+    p[d + 1] = p[d];
+    p[d] = t;
+    d = len - 2;
+    console.log("p", p, f, ++total);
+  }
+}
+
+function permuteR(data, validateFunc = (data, index) => true, index = 0) {
   const len = data.length;
-  if (index >= len) {
+  if (index === len - 1) {
     if (validateFunc(data, index)) {
       return [...data];
     } else {
@@ -302,10 +347,11 @@ function combine(data, validateFunc = (data, index) => true, index = 0) {
   }
   let result = [];
   for (let i = index; i < len; ++i) {
-    const otherItems = data.slice(index);
+    let otherItems = data.slice(index);
     otherItems.splice(i - index, 1);
     const newData = [...data.slice(0, index), data[i], ...otherItems];
     if (validateFunc(newData, index)) {
+      otherItems = null;
       const newComb = combine(newData, validateFunc, index + 1);
       if (newComb.length > 0) {
         result = [...result, ...newComb];
@@ -360,6 +406,6 @@ module.exports = {
   buildShape,
   analyze,
   iterate,
-  combine,
+  permute,
   isEqual,
 };
