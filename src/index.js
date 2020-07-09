@@ -286,14 +286,24 @@ function findData(matchData, matchShape, data, dataShape, byChunk = false) {
   return { result, matchArray };
 }
 
-function permute(data, validateFunc = (data, depth) => true, index = 0) {
-  const p = [...data],
-    len = p.length,
-    f = [...p],
-    c = buildData(len, 0);
-  let d = len - 2,
-    t;
-  let result = [...p];
+function permute(
+  data,
+  validateFunc = (permute, depth) => true,
+  saveResult = false
+) {
+  const p = [...data.keys()];
+  const len = p.length;
+  const f = buildData(len, null);
+  const c = buildData(len, 0);
+  let d = len - 2;
+  let t;
+  let result = [];
+  if (validateFunc([...data], d)) {
+    if (saveResult) {
+      result = [...data];
+    }
+  }
+
   while (d >= 0) {
     if (c[d] >= len - d - 1) {
       for (let i = d; i < len; ++i) {
@@ -324,13 +334,20 @@ function permute(data, validateFunc = (data, depth) => true, index = 0) {
     t = p[d + 1];
     p[d + 1] = p[d];
     p[d] = t;
-    d = len - 2;
-    const isvalid = validateFunc(p, d);
-    if (isvalid) {
-      for (let i = 0; i < len; ++i) {
-        result.push(p[i]);
+    let pData = [];
+    for (let j = 0; j < len; ++j) {
+      pData.push(data[p[j]]);
+    }
+    const isvalid = validateFunc(pData, d);
+    if (isvalid === true) {
+      if (saveResult) {
+        for (let i = 0; i < len; ++i) {
+          result.push(pData[i]);
+        }
       }
+      d = len - 2;
     } else if (isvalid === false) {
+      c[d] = len - d - 1;
     } else {
       break;
     }

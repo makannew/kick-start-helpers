@@ -8,7 +8,7 @@ const {
   buildData,
   buildShape,
   analyze,
-  combine,
+  permute,
   iterate,
 } = require("../src/index.js");
 
@@ -29,52 +29,54 @@ const {
     const { members } = analyze(data);
     const { members: baseMembers } = analyze(lastRow);
     let order = -1;
-    let model;
-    permute(members, (thisOrder, index) => {
-      if (!baseMembers.includes(thisOrder[0])) {
-        return false;
-      }
-
-      model = buildData(R * C, null);
-      const len = model.length;
-      const valids = thisOrder.slice(0, index);
-      const poly = thisOrder[index];
-      for (let i = 0; i < len; ++i) {
-        if (valids.includes(data[i])) {
-          model[i] = true;
+    permute(
+      members,
+      (thisOrder, depth) => {
+        if (!baseMembers.includes(thisOrder[0])) {
+          return false;
         }
-      }
 
-      for (let j = 0; j < len; ++j) {
-        if (data[j] === poly) {
-          if (model[j] === null) {
-            model[j] = true;
-          } else {
-            return false;
+        const model = buildData(R * C, null);
+        const len = model.length;
+        let valid = true;
+
+        for (let k = 0; k < thisOrder.length; ++k) {
+          let poly = thisOrder[k];
+
+          for (let j = 0; j < len; ++j) {
+            if (data[j] === poly) {
+              if (model[j] === null) {
+                model[j] = true;
+              } else {
+                valid = false;
+                if (k <= depth) {
+                  return false;
+                }
+              }
+            }
+          }
+
+          for (let j = 0; j < len; ++j) {
+            if (
+              model[j] &&
+              model[depict(j, buildShape(C, R)).namedNeighbors.d] === null
+            ) {
+              valid = false;
+              if (k <= depth) {
+                return true;
+              }
+            }
           }
         }
-      }
 
-      for (let j = 0; j < len; ++j) {
-        if (
-          model[j] &&
-          model[depict(j, buildShape(C, R)).namedNeighbors.d] === null
-        ) {
-          return false;
-        }
-      }
-
-      if (index === thisOrder.length - 1) {
-        if (model.includes(null)) {
-          return false;
-        } else {
+        if (valid && !model.includes(null)) {
           order = thisOrder.join("");
+          return "break";
         }
-      }
-
-      return true;
-    });
-
+        return true;
+      },
+      true
+    );
     printResult(testN, order);
   }
   process.exit();

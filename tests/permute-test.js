@@ -16,12 +16,13 @@ const {
 
 // Start
 (async function main() {
-  let chunk = 4;
+  let chunk = 7;
+  let data = Array.from(Array(chunk).keys());
   let b = Date.now();
-  let p1 = permute(Array.from(Array(chunk).keys()));
+  let p1 = permute(data, undefined, true);
   const ts = Date.now() - b;
   b = Date.now();
-  let p2 = recursivePermute(Array.from(Array(chunk).keys()));
+  let p2 = recursivePermute(data);
   const tr = Date.now() - b;
 
   let matches = [];
@@ -43,7 +44,7 @@ const {
   }
   const totalMatchs = matches.length;
   const uniqueMatches = Array.from(new Set(matches)).length;
-  if (totalMatchs !== uniqueMatches) {
+  if (totalMatchs !== uniqueMatches || totalMatchs !== p2.length / chunk) {
     isEqual = false;
   }
   console.log(
@@ -58,5 +59,3 @@ const {
 
   process.exit();
 })().catch((err) => console.log(err));
-
-function validate(permute, d) {}
