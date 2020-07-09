@@ -16,10 +16,14 @@ const {
 
 // Start
 (async function main() {
-  let chunk = 5;
-
+  let chunk = 4;
+  let b = Date.now();
   let p1 = permute(Array.from(Array(chunk).keys()));
+  const ts = Date.now() - b;
+  b = Date.now();
   let p2 = recursivePermute(Array.from(Array(chunk).keys()));
+  const tr = Date.now() - b;
+
   let count = 0;
   let matches = [];
   let isEqual = true;
@@ -39,5 +43,7 @@ const {
     matches = [...matches, ...result];
   }
   console.log(matches.length, Array.from(new Set(matches)).length, isEqual);
+  console.log(`Sorted permute time: ${ts} , Recursive permute time: ${tr}`);
+
   process.exit();
 })().catch((err) => console.log(err));
