@@ -16,7 +16,7 @@ const {
 
 // Start
 (async function main() {
-  let chunk = 7;
+  let chunk = 4;
   let b = Date.now();
   let p1 = permute(Array.from(Array(chunk).keys()));
   const ts = Date.now() - b;
@@ -24,7 +24,6 @@ const {
   let p2 = recursivePermute(Array.from(Array(chunk).keys()));
   const tr = Date.now() - b;
 
-  let count = 0;
   let matches = [];
   let isEqual = true;
   for (let i = 0, len = p1.length; i < len; i += chunk) {
@@ -42,8 +41,22 @@ const {
     }
     matches = [...matches, ...result];
   }
-  console.log(matches.length, Array.from(new Set(matches)).length, isEqual);
+  const totalMatchs = matches.length;
+  const uniqueMatches = Array.from(new Set(matches)).length;
+  if (totalMatchs !== uniqueMatches) {
+    isEqual = false;
+  }
+  console.log(
+    "sorted permutations:",
+    uniqueMatches,
+    "recursive permutations:",
+    p2.length / chunk,
+    "Equal=",
+    isEqual
+  );
   console.log(`Sorted permute time: ${ts} , Recursive permute time: ${tr}`);
 
   process.exit();
 })().catch((err) => console.log(err));
+
+function validate(permute, d) {}
