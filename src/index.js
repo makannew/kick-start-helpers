@@ -250,7 +250,7 @@ function isEqual(data1, data2) {
   return true;
 }
 
-function findData(matchData, matchShape, data, dataShape) {
+function findData(matchData, matchShape, data, dataShape, byChunk = false) {
   const { x: xm, y: ym, z: zm } = matchShape;
   const { x: xd, y: yd, z: zd } = dataShape;
   let matchArray = matchData.slice(0, xm);
@@ -267,42 +267,38 @@ function findData(matchData, matchShape, data, dataShape) {
     ];
   }
   //
-  const result = buildData(data.length, null);
+  const result = [];
   const matchLen = matchArray.length;
-  let index = 0;
-  let totalMatch = 0;
-  for (let i = 0, len = data.length; i < len; ++i) {
-    if (data[i] === matchArray[index] || matchArray[index] === null) {
-      ++index;
-    } else if (data[i] === matchArray[0]) {
-      index = 1;
-    } else {
-      index = 0;
-    }
-    if (index === matchLen) {
-      ++totalMatch;
-      for (let j = 0; j < matchLen; ++j) {
-        result[i - matchLen + 1 + j] = matchArray[j];
+  const step = byChunk ? matchLen : 1;
+  for (let j = 0, len = data.length; j <= len - matchLen; j += step) {
+    let isEqual = true;
+    for (let i = 0; i < matchLen; ++i) {
+      if (matchArray[i] !== data[j + i]) {
+        isEqual = false;
+        break;
       }
-      index = 0;
+    }
+    if (isEqual) {
+      result.push(j);
     }
   }
 
-  return { result, totalMatch };
+  return { result, matchArray };
 }
 
 function permute(data, validateFunc = (data, index) => true, index = 0) {
-  const len = 6,
-    p = Array.from(Array(len).keys()),
+  const p = [...data],
+    len = p.length,
     f = [...p],
     c = buildData(len, 0);
   let d = len - 2,
     t;
   let total = 0;
-  console.log("p", p, "c=", c, ++total);
+  let result = [...p];
 
   while (d >= 0) {
     //
+
     if (c[d] >= len - d - 1) {
       for (let i = d; i < len; ++i) {
         f[i] = null;
@@ -315,6 +311,10 @@ function permute(data, validateFunc = (data, index) => true, index = 0) {
       } else {
         continue;
       }
+    } else if (f[d] === p[d + 1]) {
+      t = p[len - 1];
+      p[len - 1] = p[d + 1];
+      p[d + 1] = t;
     }
     //
     if (f[d] === null) {
@@ -330,11 +330,17 @@ function permute(data, validateFunc = (data, index) => true, index = 0) {
     p[d + 1] = p[d];
     p[d] = t;
     d = len - 2;
-    console.log("p", p, "c=", c, ++total);
+    result = [...result, ...p];
+    // console.log("p", p, "c=", c, ++total);
   }
+  return result;
 }
 
-function permuteR(data, validateFunc = (data, index) => true, index = 0) {
+function recursivePermute(
+  data,
+  validateFunc = (data, index) => true,
+  index = 0
+) {
   const len = data.length;
   if (index === len - 1) {
     if (validateFunc(data, index)) {
@@ -350,7 +356,7 @@ function permuteR(data, validateFunc = (data, index) => true, index = 0) {
     const newData = [...data.slice(0, index), data[i], ...otherItems];
     if (validateFunc(newData, index)) {
       otherItems = null;
-      const newComb = combine(newData, validateFunc, index + 1);
+      const newComb = recursivePermute(newData, validateFunc, index + 1);
       if (newComb.length > 0) {
         result = [...result, ...newComb];
       }
@@ -406,4 +412,5 @@ module.exports = {
   iterate,
   permute,
   isEqual,
+  recursivePermute,
 };
