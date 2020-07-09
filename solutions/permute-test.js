@@ -16,7 +16,7 @@ const {
 
 // Start
 (async function main() {
-  let chunk = 4;
+  let chunk = 7;
   let b = Date.now();
   let p1 = permute(Array.from(Array(chunk).keys()));
   const ts = Date.now() - b;
@@ -29,7 +29,7 @@ const {
   let isEqual = true;
   for (let i = 0, len = p1.length; i < len; i += chunk) {
     const thisChunk = p1.slice(i, i + chunk);
-    console.log(thisChunk);
+    // console.log(thisChunk);
     const { result } = findData(
       thisChunk,
       buildShape(chunk),

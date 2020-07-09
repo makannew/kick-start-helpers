@@ -313,7 +313,9 @@ function permute(data, validateFunc = (data, index) => true, index = 0) {
       }
     } else if (f[d] === p[d + 1]) {
       t = p[len - 1];
-      p[len - 1] = p[d + 1];
+      for (let m = len - 1; m > d; --m) {
+        p[m] = p[m - 1];
+      }
       p[d + 1] = t;
     }
     //
