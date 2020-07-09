@@ -292,27 +292,25 @@ function findData(matchData, matchShape, data, dataShape) {
 }
 
 function permute(data, validateFunc = (data, index) => true, index = 0) {
-  const len = 4,
+  const len = 6,
     p = Array.from(Array(len).keys()),
-    f = [...p];
+    f = [...p],
+    c = buildData(len, 0);
   let d = len - 2,
     t;
   let total = 0;
-  console.log("p", p, f, ++total);
+  console.log("p", p, "c=", c, ++total);
+
   while (d >= 0) {
     //
-    if (f[d] === p[d + 1]) {
+    if (c[d] >= len - d - 1) {
       for (let i = d; i < len; ++i) {
         f[i] = null;
+        c[i] = 0;
       }
       --d;
       if (f[d] === null) {
-        // t = p[d + 1];
-        // p[d + 1] = p[d];
-        // p[d] = t;
         f[d] = p[d];
-        // d = len - 2;
-        console.log("heeeree!");
         continue;
       } else {
         continue;
@@ -320,19 +318,19 @@ function permute(data, validateFunc = (data, index) => true, index = 0) {
     }
     //
     if (f[d] === null) {
-      console.log("d=", d);
-
       f[d] = p[d];
       d = len - 2;
       f[d] = p[d];
       continue;
     }
     //
+    ++c[d];
+    //
     t = p[d + 1];
     p[d + 1] = p[d];
     p[d] = t;
     d = len - 2;
-    console.log("p", p, f, ++total);
+    console.log("p", p, "c=", c, ++total);
   }
 }
 
