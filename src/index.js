@@ -298,12 +298,7 @@ function permute(
   let d = len - 2;
   let t;
   let result = [];
-  if (validateFunc([...data], d)) {
-    if (saveResult) {
-      result = [...data];
-    }
-    console.log(p, f, c);
-  }
+  let depth = 0;
 
   while (d >= 0) {
     if (c[d] >= len - d - 1) {
@@ -315,7 +310,9 @@ function permute(
       if (f[d] === null) {
         f[d] = p[d];
       }
-      continue;
+      if (d >= 0) {
+        continue;
+      }
     } else if (f[d] === p[d + 1]) {
       t = p[len - 1];
       for (let m = len - 1; m > d; --m) {
@@ -329,34 +326,36 @@ function permute(
       f[d] = p[d];
       continue;
     }
-    ++c[d];
-    t = p[d + 1];
-    p[d + 1] = p[d];
-    p[d] = t;
+    //
     let pData = [];
     for (let j = 0; j < len; ++j) {
       pData.push(data[p[j]]);
     }
-    const isvalid = validateFunc(pData, d);
+    const isvalid = validateFunc(pData, depth);
+    //
     if (isvalid === true) {
+      if (depth === d) {
+        ++c[d];
+        t = p[d + 1];
+        p[d + 1] = p[d];
+        p[d] = t;
+        d = len - 2;
+      }
+      ++depth;
+    } else if (isvalid === false) {
+      //++c[d]; // fix here
+    } else {
+      break;
+    }
+    //
+    if (isvalid === true && depth === len - 1) {
+      depth = d;
       if (saveResult) {
         for (let i = 0; i < len; ++i) {
           result.push(pData[i]);
         }
-        console.log(p);
+        console.log(pData);
       }
-      d = len - 2;
-    } else if (isvalid === false) {
-      // for (let i = d + 1; i < len; ++i) {
-      //   c[i] >= len - i - 1;
-      // }
-      //++c[d]; // fix here
-      // t = p[d + 1];
-      // p[d + 1] = p[d];
-      // p[d] = t;
-      // ++c[d];
-    } else {
-      break;
     }
   }
   return result;

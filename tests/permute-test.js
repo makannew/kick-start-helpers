@@ -16,7 +16,7 @@ const {
 
 // Start
 (async function main() {
-  let chunk = 7;
+  let chunk = 5;
   let data = Array.from(Array(chunk).keys());
   let b = Date.now();
   let p1 = permute(data, undefined, true);
