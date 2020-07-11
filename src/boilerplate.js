@@ -1,12 +1,10 @@
-const { readArray } = require(".");
-
+// Start
 (async function main() {
   const [T] = await readIntArray();
 
   for (let testN = 1; testN <= T; ++testN) {
-    // Here is solution for test
-
-    printResult(testN, totalMatch);
+    printResult(testN, order);
+    // functions
   }
   process.exit();
 })().catch((err) => console.log(err));

@@ -286,116 +286,41 @@ function findData(matchData, matchShape, data, dataShape, byChunk = false) {
   return { result, matchArray };
 }
 
-function permute(
-  data,
-  validateFunc = (permute, depth) => true,
-  saveResult = false
-) {
-  const p = [...data.keys()];
-  const len = p.length;
-  const f = buildData(len, null);
-  const c = buildData(len, 0);
-  let d = len - 2;
-  let t;
-  let result = [];
-  let depth = 0;
-
-  while (d >= 0) {
-    if (c[d] >= len - d - 1) {
-      for (let i = d; i < len; ++i) {
-        f[i] = null;
-        c[i] = 0;
-      }
-      --d;
-      if (f[d] === null) {
-        f[d] = p[d];
-      }
-      if (d >= 0) {
-        continue;
-      }
-    } else if (f[d] === p[d + 1]) {
-      t = p[len - 1];
-      for (let m = len - 1; m > d; --m) {
-        p[m] = p[m - 1];
-      }
-      p[d + 1] = t;
-    }
-    if (f[d] === null) {
-      f[d] = p[d];
-      d = len - 2;
-      f[d] = p[d];
-      continue;
-    }
-    //
-    let pData = [];
-    for (let j = 0; j < len; ++j) {
-      pData.push(data[p[j]]);
-    }
-    const isvalid = validateFunc(pData, depth);
-    //
-    if (isvalid === true) {
-      if (depth === d) {
-        ++c[d];
-        t = p[d + 1];
-        p[d + 1] = p[d];
-        p[d] = t;
-        d = len - 2;
-      }
-      ++depth;
-    } else if (isvalid === false) {
-      //++c[d]; // fix here
-    } else {
-      break;
-    }
-    //
-    if (isvalid === true && depth === len - 1) {
-      depth = d;
-      if (saveResult) {
-        for (let i = 0; i < len; ++i) {
-          result.push(pData[i]);
-        }
-        console.log(pData);
-      }
-    }
-  }
-  return result;
-}
-
-function recursivePermute(
-  data,
-  validateFunc = (data, index) => true,
-  index = 0
-) {
+function permute(data, validateFunc = (data) => true) {
   const len = data.length;
-  if (index === len - 1) {
-    if (validateFunc(data, index)) {
-      return [...data];
+  if (len === 1) {
+    const isValid = validateFunc(data);
+    if (isValid === null) {
+      return null;
     } else {
-      return [];
+      return;
     }
   }
-  let result = [];
-  for (let i = index; i < len; ++i) {
-    let otherItems = data.slice(index);
-    otherItems.splice(i - index, 1);
-    const newData = [...data.slice(0, index), data[i], ...otherItems];
-    if (validateFunc(newData, index)) {
-      otherItems = null;
-      const newComb = recursivePermute(newData, validateFunc, index + 1);
-      if (newComb.length > 0) {
-        result = [...result, ...newComb];
+  for (let i = 0; i < len; ++i) {
+    const p = [...data];
+    p.splice(i, 1);
+    p.unshift(data[i]);
+    const isValid = validateFunc(p);
+    if (isValid === true) {
+      const newP = p.slice(1);
+      if (permute(newP, validateFunc) === null) {
+        return null;
       }
+    } else if (isValid === null) {
+      return null;
     }
   }
-  return result;
 }
 
-function iterate(data, chunkShape, dataShape, chunkFunc) {
+function iterate(data, chunkShape, dataShape, chunkFunc, overlap = true) {
   const { x: xc, y: yc, z: zc } = chunkShape;
   const { x: xd, y: yd, z: zd } = dataShape;
-  for (let z = 0; z <= zd - zc; ++z) {
-    for (let y = 0; y <= yd - yc; ++y) {
-      for (let x = 0; x <= xd - xc; ++x) {
+  const zStep = overlap ? 1 : zc;
+  const yStep = overlap ? 1 : yc;
+  const xStep = overlap ? 1 : xc;
+  for (let z = 0; z <= zd - zc; z += zStep) {
+    for (let y = 0; y <= yd - yc; y += yStep) {
+      for (let x = 0; x <= xd - xc; x += xStep) {
         let pos = x + y * xd + z * xd * yd;
         let thisChunk = [];
         let thisMask = [];
@@ -435,7 +360,6 @@ module.exports = {
   buildShape,
   analyze,
   iterate,
-  permute,
   isEqual,
-  recursivePermute,
+  permute,
 };

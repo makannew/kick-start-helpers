@@ -8,7 +8,6 @@ const {
   buildData,
   buildShape,
   analyze,
-  combinations,
   iterate,
 } = require("../src/index.js");
 

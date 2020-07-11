@@ -19,65 +19,50 @@ const {
   for (let testN = 1; testN <= T; ++testN) {
     const [R, C] = await readIntArray();
     let data = [];
-    let lastRow;
-
     for (let i = 0; i < R; ++i) {
-      lastRow = await readLine();
-      lastRow = Array.from(lastRow);
-      data = [...data, ...lastRow];
+      const thisRow = await readLine();
+      data = [...data, ...Array.from(thisRow)];
     }
     const { members } = analyze(data);
-    const { members: baseMembers } = analyze(lastRow);
-    let order = -1;
-    permute(
-      members,
-      (thisOrder, depth) => {
-        if (!baseMembers.includes(thisOrder[0])) {
-          return false;
-        }
 
-        const model = buildData(R * C, null);
-        const len = model.length;
-        let valid = true;
-
-        for (let k = 0; k < thisOrder.length; ++k) {
-          let poly = thisOrder[k];
-
-          for (let j = 0; j < len; ++j) {
-            if (data[j] === poly) {
-              if (model[j] === null) {
-                model[j] = true;
-              } else {
-                valid = false;
-                if (k <= depth) {
-                  return false;
-                }
-              }
+    let order = [];
+    for (let i = 0, len = members.length; i < len; ++i) {
+      for (let poly of members) {
+        if (!order.includes(poly)) {
+          const bases = getBase(poly);
+          let reject = false;
+          for (let base of bases) {
+            if (!order.includes(base)) {
+              reject = true;
             }
           }
-
-          for (let j = 0; j < len; ++j) {
-            if (
-              model[j] &&
-              model[depict(j, buildShape(C, R)).namedNeighbors.d] === null
-            ) {
-              valid = false;
-              if (k <= depth) {
-                return true;
-              }
-            }
+          if (!reject) {
+            order.push(poly);
           }
         }
+      }
+    }
 
-        if (valid && !model.includes(null)) {
-          order = thisOrder.join("");
-          return "break";
-        }
-        return true;
-      },
-      true
-    );
+    if (order.length === members.length) {
+      order = order.join("");
+    } else {
+      order = -1;
+    }
+
     printResult(testN, order);
+    // functions
+    function getBase(poly) {
+      const result = [];
+      for (let i = 0, len = data.length; i < len; ++i) {
+        if (data[i] === poly) {
+          const dp = i + C < len ? data[i + C] : null;
+          if (dp && dp !== poly) {
+            result.push(dp);
+          }
+        }
+      }
+      return Array.from(new Set(result));
+    }
   }
   process.exit();
 })().catch((err) => console.log(err));
