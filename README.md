@@ -38,6 +38,9 @@ It is realy hard to attend in this coding competition with Javacript. Main probl
 
 This problem push most competitors toward low-level languages like C++. However, I believe if these non-relevant problem fixed, taking advantage of a rich high-level language like Javascript can potentially leed to a winning strategy.
 
+## P.S.
+After I tried round D of Google KS, I realized that still traditional coding tricks are more useful than helper functions! However, the boilerplate and console synchronous reader work perfectly well and they are essential if we want to write code in Javascript.
+
 <br/>
 
 
