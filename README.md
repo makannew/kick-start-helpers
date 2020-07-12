@@ -5,6 +5,20 @@ It provides a way to solve google [kick-start competition](https://codingcompeti
 - Printing results
 - Abstract interface to solve data-structure problems
 
+## Functions
+- readLine
+- readArray
+- readIntArray
+- printResult
+- findData
+- depict
+- buildData
+- buildShape
+- analyze
+- iterate
+- isEqual
+- permute
+
 ## How to use
 * Copy/paste content of [index.js](https://github.com/makannew/kick-start-helpers/blob/master/src/index.js) in the code window
 * Copy/paste content of [boilerplate.js](https://github.com/makannew/kick-start-helpers/blob/master/src/boilerplate.js) in the code window
