@@ -18,11 +18,17 @@ const {
   // calc perfects
   const maxSum = 100 * 100000;
 
-  const p = {};
+  const p1 = {};
+  const p2 = {};
   for (let i = 0; i <= maxSum; ++i) {
     let root = Math.floor(Math.sqrt(i));
     if (i === root * root) {
-      p[i] = 0;
+      if (i <= 100000) {
+        p1[i] = 0;
+        p2[i] = 0;
+      } else {
+        p2[i] = 0;
+      }
     }
   }
   //
@@ -34,15 +40,12 @@ const {
     //
     let sum = 0;
     const sums = [sum];
-    for (let i = 0; i < N; ++i) {
-      sum += data[i];
-      sums.push(sum);
-    }
-    //
-    const res = { ...p };
+    const res = N <= 1000 ? { ...p1 } : { ...p2 };
     for (let i = 1; i < N + 1; ++i) {
+      sum += data[i - 1];
+      sums.push(sum);
       for (j = 0; j < i; ++j) {
-        let d = sums[i] - sums[j];
+        let d = sum - sums[j];
         if (d >= 0) {
           ++res[d];
         }
