@@ -36,7 +36,7 @@ My main goal is building few functions to solve data-structure problems in an ab
 ## Motivation
 It is realy hard to attend in this coding competition with Javacript. Main problem is reading data from node.js console happens asynchronously, so to solve a simple problem, competitor needs to deal with a complex async/callback pattern to just read the data. 
 
-This problem push most competitors toward low-level languages like C++. However, I believe if these non-relevant problem fixed, taking advantage of a rich high-level language like Javascript can potentially leed to a winning strategy.
+This problem push most competitors towards low-level languages like C++. However, I believe if this non-relevant problem fixed, taking advantage of a rich high-level language like Javascript can potentially leed to a winning strategy.
 
 ## P.S.
 After I tried round D of Google KS, I realized that still traditional coding tricks are more useful than helper functions! However, the boilerplate and console synchronous reader work perfectly well and they are essential if we want to write code in Javascript.
