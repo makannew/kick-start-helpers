@@ -9,7 +9,7 @@ const {
   buildShape,
   analyze,
   iterate,
-} = require("../src/index.js");
+} = require("../../src/index.js");
 
 // Start
 (async function main() {

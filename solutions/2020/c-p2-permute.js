@@ -10,7 +10,7 @@ const {
   analyze,
   permute,
   iterate,
-} = require("../src/index.js");
+} = require("../../src/index.js");
 
 // Start
 (async function main() {
