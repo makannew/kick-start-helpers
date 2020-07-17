@@ -1,6 +1,16 @@
+/**
+ * Javacript boilerplate and helper functions
+ * for Google kick start competition
+ *
+ * @link https://github.com/makannew/kick-start-helpers
+ *
+ * @author Makan Edrisi
+ *
+ * @ since 2020
+ */
 let inputBuffer = [];
-let readIndex = 0;
-let checkAvailableInput = () => null;
+const nullFunc = () => null;
+let checkAvailableInput = nullFunc;
 const readlineModule = require("readline");
 syncWithConsole(readlineModule);
 
@@ -16,11 +26,11 @@ function syncWithConsole(readlineModule) {
 }
 
 async function readLine() {
-  ++readIndex;
   return new Promise((resolve, reject) => {
     checkAvailableInput = () => {
-      if (readIndex <= inputBuffer.length) {
-        resolve(inputBuffer[readIndex - 1]);
+      if (inputBuffer.length > 0) {
+        checkAvailableInput = nullFunc;
+        resolve(inputBuffer.shift());
       }
     };
     checkAvailableInput();

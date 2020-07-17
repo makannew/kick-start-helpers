@@ -22,13 +22,13 @@ const {
     for (let j = K; j > 0; --j) {
       matchData.push(j);
     }
-    const { totalMatch } = findData(
+    const { result } = findData(
       matchData,
       buildShape(K),
       data,
       buildShape(data.length)
     );
-    printResult(testN, totalMatch);
+    printResult(testN, result.length);
   }
   process.exit();
 })().catch((err) => console.log(err));
