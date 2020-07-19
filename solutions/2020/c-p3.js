@@ -15,51 +15,36 @@ const {
 // Start
 (async function main() {
   const [T] = await readIntArray();
-  // calc perfects
-  const maxSum = 100 * 100000;
+  //
+  const max = 10000000;
 
-  const p1 = {};
-  const p2 = {};
-  for (let i = 0; i <= maxSum; ++i) {
-    let root = Math.floor(Math.sqrt(i));
-    if (i === root * root) {
-      if (i <= 100000) {
-        p1[i] = 0;
-        p2[i] = 0;
-      } else {
-        p2[i] = 0;
-      }
-    }
-  }
+  const p = new Array(max * 2);
+
   //
   for (let testN = 1; testN <= T; ++testN) {
     const [N] = await readIntArray();
     const data = await readIntArray();
     //
-    let total = 0;
-    //
+    let ans = 0;
     let sum = 0;
-    const sums = [sum];
-    const res = N <= 1000 ? { ...p1 } : { ...p2 };
-    for (let i = 1; i < N + 1; ++i) {
-      sum += data[i - 1];
-      sums.push(sum);
-      for (j = 0; j < i; ++j) {
-        let d = sum - sums[j];
-        if (d >= 0) {
-          ++res[d];
-        }
-      }
-    }
+    let maxSum = 0;
     //
-    const all = Object.values(res);
-    for (let i = 0, len = all.length; i < len; ++i) {
-      let c = all[i];
-      if (c > 0) {
-        total += c;
-      }
+    p.fill(0);
+    p[max] = 1;
+    for (let i = 0; i < N; ++i) {
+      const thisData = data[i];
+      maxSum += thisData > 0 ? thisData : 0;
+      sum += thisData;
+      let j2;
+      let j = -1;
+      do {
+        ++j;
+        j2 = j * j;
+        ans += p[max + sum - j2];
+      } while (j2 <= maxSum);
+      ++p[sum + max];
     }
-    printResult(testN, total);
+    printResult(testN, ans);
     // functions
   }
   process.exit();
