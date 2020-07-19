@@ -20,7 +20,7 @@ It provides a way to solve google [kick-start competition](https://codingcompeti
 - permute
 
 ## How to use
-* Copy/paste content of [index.js](https://github.com/makannew/kick-start-helpers/blob/master/src/index.js) in the code window
+* Copy/paste content (except export module part) of [index.js](https://github.com/makannew/kick-start-helpers/blob/master/src/index.js) in the code window 
 * Copy/paste content of [template.js](https://github.com/makannew/kick-start-helpers/blob/master/src/template.js) in the code window
 * Write your code inside the provided `for` loop
 
