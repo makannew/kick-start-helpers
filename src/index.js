@@ -353,6 +353,20 @@ function iterate(data, chunkShape, dataShape, chunkFunc, overlap = true) {
     }
   }
 }
+//
+function binaryExp(num, pow, m) {
+  let a = num;
+  let b = pow;
+  let res = 1n;
+  while (b > 0) {
+    if (b % 2n == 1n) {
+      res = (res * a) % m;
+    }
+    a = (a * a) % m;
+    b = b / 2n;
+  }
+  return res;
+}
 // Result printer
 function printResult(testN, result) {
   console.log(`Case #${testN}: ${result}`);
@@ -372,4 +386,5 @@ module.exports = {
   iterate,
   isEqual,
   permute,
+  binaryExp,
 };
