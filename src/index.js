@@ -357,13 +357,13 @@ function iterate(data, chunkShape, dataShape, chunkFunc, overlap = true) {
 function binaryExp(num, pow, m) {
   let a = num;
   let b = pow;
-  let res = 1n;
+  let res = 1;
   while (b > 0) {
-    if (b % 2n == 1n) {
+    if (b % 2 == 1) {
       res = (res * a) % m;
     }
     a = (a * a) % m;
-    b = b / 2n;
+    b = b / 2;
   }
   return res;
 }
