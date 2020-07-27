@@ -34,40 +34,30 @@ const { mulMod, expMod, divMod } = wasm.exports;
     //
     const A = [];
     A.length = N;
-    A[0] = (x1 + y1) % F;
+    A[0] = mulMod((x1 + y1) % F, N);
+    let sum = A[0];
     // generate Array A
     let px = x1;
     let py = y1;
     for (let i = 1; i < N; ++i) {
       const nx = (((C * px) % F) + ((D * py) % F) + (E1 % F)) % F;
       const ny = (((D * px) % F) + ((C * py) % F) + (E2 % F)) % F;
-      A[i] = (nx + ny) % F;
+      A[i] = mulMod((nx + ny) % F, N - i);
+      sum += A[i];
+      sum %= mod;
       px = nx;
       py = ny;
     }
-    // calculate total element occurance in contiguous subarrays
-    let ans = 0;
-    for (let i = 0; i < N; ++i) {
-      for (let j = 0; j <= i; ++j) {
-        const ni = N - i;
-        const nk = K;
-        if (j === 0) {
-          ans += mulMod(mulMod(A[i], ni), nk);
-        } else {
-          const r = j + 1;
-          let e = mulMod(A[i], expMod(r, nk + 1));
-          let p = e - (A[i] % mod);
-          if (p < 0) p += mod;
-          p = p % mod;
-          p = divMod(p, r - 1);
-          p = p - A[i];
-          if (p < 0) p += mod;
-          p = p % mod;
-          ans += mulMod(p, ni);
-        }
-
-        ans = ans % mod;
+    //
+    let ans = mulMod(sum, K);
+    for (let i = 2; i <= N; ++i) {
+      sum -= A[i - 2];
+      ans += mulMod(sum, divMod(expMod(i, K + 1) - 1, i - 1));
+      ans -= sum;
+      if (ans < 0) {
+        ans += mod;
       }
+      ans %= mod;
     }
 
     printResult(testN, ans);
