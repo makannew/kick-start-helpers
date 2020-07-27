@@ -10,4 +10,4 @@ code += "const wasmModule = new WebAssembly.Module(wasmCode, {});\n";
 code += "const wasm = new WebAssembly.Instance(wasmModule);\n";
 code += "const { mulMod, expMod, divMod } = wasm.exports;\n";
 
-fs.writeFileSync("function-js.txt", code);
+fs.writeFileSync("wasm.js", code);

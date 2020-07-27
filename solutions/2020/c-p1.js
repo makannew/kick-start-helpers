@@ -8,8 +8,12 @@ const {
   buildData,
   buildShape,
   analyze,
+  permute,
   iterate,
-} = require("../../src/index.js");
+  mulMod,
+  expMod,
+  divMod,
+} = require("../../build/local.js");
 
 // Start
 (async function main() {
