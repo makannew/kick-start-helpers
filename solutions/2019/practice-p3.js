@@ -10,7 +10,9 @@ const {
   analyze,
   permute,
   iterate,
-  binaryExp,
+  mulMod,
+  expMod,
+  divMod,
 } = require("../../src/index.js");
 
 // Start
@@ -45,14 +47,14 @@ const {
           ans += ((((A[i] % mod) * ni) % mod) % mod) * nk;
         } else {
           const r = j + 1;
-          let e = binaryExp(r, nk + 1, mod);
+          let e = expMod(r, nk + 1, mod);
           e = (A[i] % mod) * e;
           let p = A[i] % mod;
           p = (e % mod) - p;
 
           if (p < 0) p += mod;
           p = p % mod;
-          let d = binaryExp(r - 1, mod - 2, mod);
+          let d = expMod(r - 1, mod - 2, mod);
           p = (p * d) % mod;
           p = p - A[i];
           if (p < 0) p += mod;

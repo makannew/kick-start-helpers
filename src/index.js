@@ -354,23 +354,13 @@ function iterate(data, chunkShape, dataShape, chunkFunc, overlap = true) {
   }
 }
 //
-function binaryExp(num, pow, m) {
-  let a = num;
-  let b = pow;
-  let res = 1;
-  while (b > 0) {
-    if (b % 2 == 1) {
-      res = (res * a) % m;
-    }
-    a = (a * a) % m;
-    b = b / 2;
-  }
-  return res;
-}
 // Result printer
 function printResult(testN, result) {
   console.log(`Case #${testN}: ${result}`);
 }
+
+//
+const { mulMod, expMod, divMod } = require("../webassembly/index");
 
 // export modules only for local usage
 module.exports = {
@@ -386,5 +376,7 @@ module.exports = {
   iterate,
   isEqual,
   permute,
-  binaryExp,
+  mulMod,
+  expMod,
+  divMod,
 };
