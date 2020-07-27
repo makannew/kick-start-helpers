@@ -10,10 +10,18 @@ const {
   analyze,
   permute,
   iterate,
-  mulMod,
-  expMod,
-  divMod,
 } = require("../../src/index.js");
+//
+//
+
+// kick-start-helpers webassembly module
+// Automatically generated at Mon Jul 27 2020 17:37:47 GMT+0800 (Australian Western Standard Time)
+const wasmString =
+  "0,97,115,109,1,0,0,0,1,7,1,96,2,124,124,1,124,3,4,3,0,0,0,7,28,3,6,109,117,108,77,111,100,0,0,6,101,120,112,77,111,100,0,1,6,100,105,118,77,111,100,0,2,10,147,1,3,38,0,32,0,176,66,135,148,235,220,3,129,32,1,176,66,135,148,235,220,3,129,126,66,135,148,235,220,3,124,66,135,148,235,220,3,129,185,11,86,2,2,126,1,127,66,1,33,2,32,0,177,66,135,148,235,220,3,130,33,3,32,1,177,66,135,148,235,220,3,130,167,33,4,3,64,32,4,65,1,113,4,64,32,2,32,3,126,66,135,148,235,220,3,130,33,2,11,32,3,32,3,126,66,135,148,235,220,3,130,33,3,32,4,65,1,118,34,4,13,0,11,32,2,186,11,19,0,32,1,68,0,0,128,2,101,205,205,65,16,1,32,0,16,0,11";
+const wasmCode = new Uint8Array(wasmString.split(","));
+const wasmModule = new WebAssembly.Module(wasmCode, {});
+const wasm = new WebAssembly.Instance(wasmModule);
+const { mulMod, expMod, divMod } = wasm.exports;
 
 // Start
 (async function main() {
@@ -44,23 +52,18 @@ const {
         const ni = N - i;
         const nk = K;
         if (j === 0) {
-          ans += ((((A[i] % mod) * ni) % mod) % mod) * nk;
+          ans += mulMod(mulMod(A[i], ni), nk);
         } else {
           const r = j + 1;
-          let e = expMod(r, nk + 1, mod);
-          e = (A[i] % mod) * e;
-          let p = A[i] % mod;
-          p = (e % mod) - p;
-
+          let e = mulMod(A[i], expMod(r, nk + 1));
+          let p = e - (A[i] % mod);
           if (p < 0) p += mod;
           p = p % mod;
-          let d = expMod(r - 1, mod - 2, mod);
-          p = (p * d) % mod;
+          p = divMod(p, r - 1);
           p = p - A[i];
           if (p < 0) p += mod;
           p = p % mod;
-
-          ans += p * ni;
+          ans += mulMod(p, ni);
         }
 
         ans = ans % mod;
