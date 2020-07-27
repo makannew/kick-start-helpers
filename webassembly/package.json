@@ -1,0 +1,21 @@
+{
+  "name": "webassembly-kick-start-functions",
+  "version": "1.0.0",
+  "description": "webassembly functions for kick-start-helpers",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/makannew/kick-start-helpers/webassembly"
+  },
+  "keywords": [
+    "webassembly",
+    "modulo",
+    "exponentiation",
+    "kick-start-competition"
+  ],
+  "author": "Makan Edrisi",
+  "license": "MIT"
+}
