@@ -3,7 +3,7 @@
 It provides a way to solve google [kick-start competition](https://codingcompetitions.withgoogle.com/kickstart) problems with Javascript.
 - Reading data synchronously from console
 - Printing results
-- Abstract interface to solve data-structure problems
+- helper functions
 
 ## Functions
 - readLine
@@ -18,11 +18,13 @@ It provides a way to solve google [kick-start competition](https://codingcompeti
 - iterate
 - isEqual
 - permute
+- mulMod(a,b) // 64bit modulo 10^9+7
+- expMod(a,b) // 64bit modulo 10^9+7
+- divMod(a,b) // 64bit modulo 10^9+7
 
 ## How to use
-* Copy/paste content (except export module part) of [index.js](https://github.com/makannew/kick-start-helpers/blob/master/src/index.js) in the code window 
-* Copy/paste content of [template.js](https://github.com/makannew/kick-start-helpers/blob/master/src/template.js) in the code window
-* Write your code inside the provided `for` loop
+* Copy/paste content of [compete.js](https://github.com/makannew/kick-start-helpers/blob/master/build/compete.js) in the code window 
+* Write your code at the end of the codes inside the provided `for` loop
 
 ## Goal
 My main goal is building few functions to solve data-structure problems in an abstract way close to human thinking pattern. Then If it is possible to solve all past competition problems through these functions I can conclude that they will useful for comming problems as well. These functions should have some features to be more effective:
