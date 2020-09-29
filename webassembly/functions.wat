@@ -73,4 +73,13 @@
   get_local $a
   call $mulMod
  )
+ ;; 64bit Integer Division
+ (func $intDiv (export "intDiv") (param $a f64) (param $b f64) (result f64)
+ get_local $a
+ i64.trunc_f64_s
+ get_local $b
+ i64.trunc_f64_s
+ i64.div_s
+ f64.convert_i64_u
+ )
 )

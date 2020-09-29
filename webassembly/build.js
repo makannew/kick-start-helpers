@@ -8,6 +8,6 @@ code += `const wasmString = "${wasmCode.toString()}"\n`;
 code += `const wasmCode = new Uint8Array(wasmString.split(","));\n`;
 code += "const wasmModule = new WebAssembly.Module(wasmCode, {});\n";
 code += "const wasm = new WebAssembly.Instance(wasmModule);\n";
-code += "const { mulMod, expMod, divMod } = wasm.exports;\n";
+code += "const { mulMod, expMod, divMod, intDiv } = wasm.exports;\n";
 
 fs.writeFileSync("wasm.js", code);

@@ -4,7 +4,7 @@ const wasmCode = new Uint8Array(buf);
 //
 const wasmModule = new WebAssembly.Module(wasmCode, {});
 const wasm = new WebAssembly.Instance(wasmModule);
-const { mulMod, expMod, divMod } = wasm.exports;
+const { mulMod, expMod, divMod, intDiv } = wasm.exports;
 // start tests
 console.log("\b");
 console.log("\b", "Start testing...", "\b");

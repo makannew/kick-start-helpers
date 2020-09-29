@@ -3,13 +3,12 @@
 const fs = require("fs");
 process.chdir(__dirname);
 const boilerplate = fs.readFileSync("./boilerplate.js");
-const helpers = fs.readFileSync("./helpers.js");
 const wasm = fs.readFileSync("../webassembly/wasm.js");
 const template = fs.readFileSync("./template.js");
 
 const info = `
 /**
-* Javacript boilerplate and helper functions
+* Javacript boilerplate
 * for Google kick start competition
 *
 * @link https://github.com/makannew/kick-start-helpers
@@ -17,6 +16,7 @@ const info = `
 * @author Makan Edrisi
 *
 * @ since 2020
+* built at ${new Date(Date.now()).toString()}
 */\n`;
 
 const allExports = `
@@ -25,13 +25,6 @@ module.exports = {
   readArray,
   readIntArray,
   printResult,
-  findData,
-  depict,
-  buildData,
-  buildShape,
-  analyze,
-  permute,
-  iterate,
   mulMod,
   expMod,
   divMod,
@@ -39,6 +32,6 @@ module.exports = {
 \n
 `;
 
-const mainParts = info + boilerplate + helpers + wasm;
+const mainParts = info + boilerplate + wasm;
 fs.writeFileSync("../build/local.js", mainParts + allExports);
 fs.writeFileSync("../build/compete.js", mainParts + template);

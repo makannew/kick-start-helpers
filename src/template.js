@@ -1,4 +1,6 @@
+//
 // Start
+//
 (async function main() {
   const [T] = await readIntArray();
 
@@ -8,3 +10,8 @@
   }
   process.exit();
 })().catch((err) => console.log(err));
+//
+//
+function printResult(testN, result) {
+  console.log(`Case #${testN}: ${result}`);
+}
