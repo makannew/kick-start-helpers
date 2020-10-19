@@ -66,8 +66,41 @@ const { mulMod, expMod, divMod, intDiv } = wasm.exports;
   const [T] = await readIntArray();
 
   for (let testN = 1; testN <= T; ++testN) {
+    const [W,N] = await readIntArray();
+    const A = await readIntArray();
+    //
+    let result
+    for (let i=1;i<=N;++i){
+      let d=0
+      for (let j=0;j<W;++j){
+        const a = A[j]
+        if (a>i){
+          if (a-i<i+N-a){
+            d+=a-i
+          }else{
+            d+=i+N-a
+          }
+        }else{
+          if (i-a<a+N-i){
+            d+=i-a
+          }else{
+            d+=a+N-i
+          }
+        }
 
+      }
+      //
+      if (result===undefined){
+        result=d
+      }
+      if (d<result){
+        result=d
+      }
+
+    }
     
+
+
     printResult(testN, result);
     // functions
   }

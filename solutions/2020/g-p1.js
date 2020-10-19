@@ -66,8 +66,56 @@ const { mulMod, expMod, divMod, intDiv } = wasm.exports;
   const [T] = await readIntArray();
 
   for (let testN = 1; testN <= T; ++testN) {
+    const S = await readLine();
+    //
+    // const reg = /"KICK"|"START"/g;
+    // const found = reg.matchAll(S);
+    //
+    const found=[]
+    let p1,p2
+    let i=0
+    do{
+      const p1 = S.indexOf("KICK",i)
+      const p2 = S.indexOf("START",i)
+      //
+      const L= S.length
+      if (p1!==-1 && p2!==-1){
+        if (p1<p2){
+          found.push(true)
+          i=p1+4
+        }else{
+          found.push(false)
+          i=p2+5
+        }
+      }else{
+        if (p1!==-1){
+          found.push(true)
+          i=p1+4
+        }
+        if (p2!==-1){
+          found.push(false)
+          i=p2+5
+        }
+      }
+      if (i>=L){
+        break
+      }
+      
+    }while(p1!==-1 || p2!==-1)
 
-    
+    //
+    let result=0
+    for (let i=0,len=found.length;i<len-1;++i){
+      if (found[i]===true){
+        for (let j=i+1;j<len;++j){
+          if (found[j]===false){
+            ++result
+          }
+        }
+      }
+    }
+
+
     printResult(testN, result);
     // functions
   }
